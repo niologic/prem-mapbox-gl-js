@@ -9,6 +9,7 @@ import {
     CollatorType,
     array,
     toString as typeToString,
+    DateType,
 } from '../types';
 
 import {typeOf, Color, validateRGBA, validateHSLA, toString as valueToString} from '../values';
@@ -91,6 +92,16 @@ const expressions: ExpressionRegistry = {
     'distance': Distance,
     'config': Config
 };
+
+function epoch(ctx: EvaluationContext, [epoch]: Expression[]) {
+    epoch = epoch.evaluate(ctx);
+
+    if (typeof epoch !== 'number') {
+        throw new RuntimeError('epoch seconds must be a number');
+    }
+
+    return new Date(epoch);
+}
 
 function rgba(ctx: EvaluationContext, [r, g, b, a]: Expression[]) {
     r = r.evaluate(ctx);
@@ -181,6 +192,25 @@ CompoundExpression.register(expressions, {
         [ColorType],
         (ctx, [v]) => {
             return v.evaluate(ctx).toRenderColor(null).toArray();
+        }
+    ],
+    'epoch': [
+        DateType,
+        [NumberType],
+        epoch
+    ],
+    'hour': [
+        NumberType,
+        [DateType],
+        (ctx, [v]) => {
+            return (v.evaluate(ctx) as Date).getHours()
+        }
+    ],
+    'minute': [
+        NumberType,
+        [DateType],
+        (ctx, [v]) => {
+            return (v.evaluate(ctx) as Date).getMinutes()
         }
     ],
     'rgb': [

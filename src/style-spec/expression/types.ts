@@ -13,6 +13,9 @@ export type BooleanTypeT = {
 export type ColorTypeT = {
     kind: 'color';
 };
+export type DateTypeT = {
+    kind: 'date';
+};
 export type ObjectTypeT = {
     kind: 'object';
 };
@@ -34,7 +37,7 @@ export type ResolvedImageTypeT = {
 
 export type EvaluationKind = 'constant' | 'source' | 'camera' | 'composite';
 
-export type Type = NullTypeT | NumberTypeT | StringTypeT | BooleanTypeT | ColorTypeT | ObjectTypeT | ValueTypeT | // eslint-disable-line no-use-before-define
+export type Type = NullTypeT | NumberTypeT | StringTypeT | BooleanTypeT | ColorTypeT | DateTypeT | ObjectTypeT | ValueTypeT | // eslint-disable-line no-use-before-define
 ArrayType | ErrorTypeT | CollatorTypeT | FormattedTypeT | ResolvedImageTypeT;
 
 export type ArrayType = {
@@ -48,6 +51,7 @@ export type NativeType = 'number' | 'string' | 'boolean' | 'null' | 'array' | 'o
 export const NullType = {kind: 'null'} as const;
 export const NumberType = {kind: 'number'} as const;
 export const StringType = {kind: 'string'} as const;
+export const DateType = {kind: 'date'} as const
 export const BooleanType = {kind: 'boolean'} as const;
 export const ColorType = {kind: 'color'} as const;
 export const ObjectType = {kind: 'object'} as const;
@@ -82,6 +86,7 @@ const valueMemberTypes = [
     StringType,
     BooleanType,
     ColorType,
+    DateType,
     FormattedType,
     ObjectType,
     array(ValueType),

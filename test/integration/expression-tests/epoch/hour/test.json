@@ -1,0 +1,14 @@
+{
+  "expression": ["hour", ["epoch", 1394104654000]],
+  "inputs": [[{}, {}]],
+  "expected": {
+    "compiled": {
+      "result": "success",
+      "isFeatureConstant": true,
+      "isZoomConstant": true,
+      "type": "number"
+    },
+    "outputs": [12],
+    "serialized": 12
+  }
+}

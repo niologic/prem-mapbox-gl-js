@@ -4,7 +4,7 @@ import Color from '../util/color';
 import Collator from './types/collator';
 import Formatted from './types/formatted';
 import ResolvedImage from './types/resolved_image';
-import {NullType, NumberType, StringType, BooleanType, ColorType, ObjectType, ValueType, CollatorType, FormattedType, ResolvedImageType, array} from './types';
+import {NullType, NumberType, StringType, BooleanType, ColorType, ObjectType, ValueType, CollatorType, FormattedType, ResolvedImageType, array, DateType} from './types';
 
 import type {Type} from './types';
 
@@ -52,7 +52,7 @@ export function validateHSLA(h: unknown, s: unknown, l: unknown, a?: unknown): s
     return null;
 }
 
-export type Value = null | string | boolean | number | Color | Collator | Formatted | ResolvedImage | ReadonlyArray<Value> | {
+export type Value = null | string | boolean | number | Color | Date | Collator | Formatted | ResolvedImage | ReadonlyArray<Value> | {
     readonly [key: string]: Value;
 };
 
@@ -64,6 +64,8 @@ export function isValue(mixed: unknown): boolean {
     } else if (typeof mixed === 'boolean') {
         return true;
     } else if (typeof mixed === 'number') {
+        return true;
+    } else if (mixed instanceof Date) {
         return true;
     } else if (mixed instanceof Color) {
         return true;
@@ -103,6 +105,8 @@ export function typeOf(value: Value): Type {
         return NumberType;
     } else if (value instanceof Color) {
         return ColorType;
+    } else if (value instanceof Date) {
+        return DateType;
     } else if (value instanceof Collator) {
         return CollatorType;
     } else if (value instanceof Formatted) {
@@ -140,6 +144,8 @@ export function toString(value: Value): string {
         return String(value);
     } else if (value instanceof Color || value instanceof Formatted || value instanceof ResolvedImage) {
         return value.toString();
+    } else if (value instanceof Date) {
+        return value.toISOString();
     } else {
         return JSON.stringify(value);
     }

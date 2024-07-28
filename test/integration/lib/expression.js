@@ -53,6 +53,10 @@ function stripPrecision(x) {
 }
 
 function deepEqual(a, b) {
+    if (a instanceof Date)
+        a = a.toISOString()
+    if (b instanceof Date)
+        b = b.toISOString()
     if (typeof a !== typeof b)
         return false;
     if (typeof a === 'number') {
@@ -191,6 +195,7 @@ export function run(implementation, options, runExpressionTest) {
 
             done();
         } catch (e) {
+            console.log(e)
             done(e);
         }
     });

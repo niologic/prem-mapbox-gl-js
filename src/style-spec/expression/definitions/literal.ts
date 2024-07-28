@@ -63,6 +63,8 @@ class Literal implements Expression {
         } else if (this.value instanceof Formatted) {
             // Same as Color
             return this.value.serialize();
+        } else if (this.value instanceof Date) {
+            return this.value.toISOString();
         } else {
             assert(this.value === null ||
                 typeof this.value === 'string' ||

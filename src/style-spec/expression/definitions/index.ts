@@ -51,6 +51,7 @@ import type {Type} from '../types';
 import type EvaluationContext from '../evaluation_context';
 import type {Varargs} from '../compound_expression';
 import type {Expression, ExpressionRegistry} from '../expression';
+import Holidays from 'date-holidays';
 
 const expressions: ExpressionRegistry = {
     // special forms
@@ -176,6 +177,8 @@ function hashString(str: string) {
     return hash;
 }
 
+const hd = new Holidays('DE')
+
 CompoundExpression.register(expressions, {
     'error': [
         ErrorType,
@@ -204,6 +207,21 @@ CompoundExpression.register(expressions, {
         [DateType],
         (ctx, [v]) => {
             return (v.evaluate(ctx) as Date).getHours()
+        }
+    ],
+    'dayOfWeekOrHoliday': [
+        NumberType,
+        [DateType],
+        (ctx, [v]) => {
+            const date = v.evaluate(ctx) as Date
+
+            if (hd.isHoliday(date)) {
+                return -1
+            }
+
+            const dayOfWeek = date.getDay()
+            
+            return (dayOfWeek + 6) % 7
         }
     ],
     'minute': [

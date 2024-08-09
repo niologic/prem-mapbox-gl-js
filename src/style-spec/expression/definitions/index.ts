@@ -177,7 +177,12 @@ function hashString(str: string) {
     return hash;
 }
 
+const getDateKey = (d: Date) => `${d.getFullYear()}:${d.getMonth()}:${d.getDate()}`
+
 const hd = new Holidays('DE')
+const holidayYears = [2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024, 2025]
+const holidays = holidayYears.flatMap((year) => hd.getHolidays(year))
+const holidayCache = new Set(holidays.map((h) => getDateKey(new Date(h.date))))
 
 CompoundExpression.register(expressions, {
     'error': [
@@ -215,7 +220,7 @@ CompoundExpression.register(expressions, {
         (ctx, [v]) => {
             const date = v.evaluate(ctx) as Date
 
-            if (hd.isHoliday(date)) {
+            if (holidayCache.has(getDateKey(date)) || hd.isHoliday(date)) {
                 return -1
             }
 

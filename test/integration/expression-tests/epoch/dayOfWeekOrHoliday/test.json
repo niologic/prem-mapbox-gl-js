@@ -1,0 +1,14 @@
+{
+  "expression": ["dayOfWeekOrHoliday", ["epoch", 1735055279000]],
+  "inputs": [[{}, {}]],
+  "expected": {
+    "compiled": {
+      "result": "success",
+      "isFeatureConstant": true,
+      "isZoomConstant": true,
+      "type": "number"
+    },
+    "outputs": [-1],
+    "serialized": -1
+  }
+}

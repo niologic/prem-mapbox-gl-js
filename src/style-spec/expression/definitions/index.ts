@@ -180,7 +180,9 @@ function hashString(str: string) {
 const getDateKey = (d: Date) => `${d.getFullYear()}:${d.getMonth()}:${d.getDate()}`
 
 const hd = new Holidays('DE')
-const holidayYears = [2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024, 2025]
+const MIN_HOLIDAY_YEAR = 2016
+const MAX_HOLIDAY_YEAR = 2026
+const holidayYears = Array.from({length: (MAX_HOLIDAY_YEAR - MIN_HOLIDAY_YEAR)}, (_, k) => k + MIN_HOLIDAY_YEAR)
 const holidays = holidayYears.flatMap((year) => hd.getHolidays(year))
 const holidayCache = new Set(holidays.map((h) => getDateKey(new Date(h.date))))
 
@@ -220,7 +222,9 @@ CompoundExpression.register(expressions, {
         (ctx, [v]) => {
             const date = v.evaluate(ctx) as Date
 
-            if (holidayCache.has(getDateKey(date)) || hd.isHoliday(date)) {
+            if (date.getFullYear() >= MIN_HOLIDAY_YEAR && date.getFullYear() <= MAX_HOLIDAY_YEAR) {
+                if (holidayCache.has(getDateKey(date))) return -1
+            } else if (hd.isHoliday(date)) {
                 return -1
             }
 
